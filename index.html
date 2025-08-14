@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Amit Sharan — Portfolio</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Particle trail canvas -->
+  <canvas id="cursor-canvas"></canvas>
+
+  <header class="nav">
+    <a href="#" class="brand">Amit Sharan</a>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <div class="hero-left">
+        <h1>Flutter Dev • DevOps Learner</h1>
+        <p>Blender & Rive Animator | Turning ideas into interactive magic</p>
+        <a class="cta" href="#projects">See My Work</a>
+      </div>
+      <div class="hero-right" id="three-container"></div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="projects">
+      <h2>Projects</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <img src="https://picsum.photos/400/250?1" alt="Project 1" />
+          <h3>Flutter E-commerce App</h3>
+          <p>Cross-platform shopping experience with secure payments.</p>
+        </div>
+        <div class="project-card">
+          <img src="https://picsum.photos/400/250?2" alt="Project 2" />
+          <h3>DevOps CI/CD Pipeline</h3>
+          <p>Automated deployments with AWS & GitHub Actions.</p>
+        </div>
+        <div class="project-card">
+          <img src="https://picsum.photos/400/250?3" alt="Project 3" />
+          <h3>3D Portfolio Experience</h3>
+          <p>Interactive 3D web portfolio using Three.js.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+      <h2>Contact Me</h2>
+      <form>
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <textarea placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Amit Sharan. All rights reserved.</p>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
