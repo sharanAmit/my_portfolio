@@ -1,143 +1,115 @@
-import gsap from "gsap";
-import * as THREE from "three";
-import ScrollTrigger from "gsap/ScrollTrigger";
+// SPA Content
+const pages = {
+  home: `
+    <section>
+      <h1>Hi, I'm Amit Sharan</h1>
+      <p>Flutter Developer | DevOps Learner | Blender & Rive Animator</p>
+      <p>I build modern apps with animations and robust infrastructure skills. I love blending code, art, and performance.</p>
+      <img src="https://via.placeholder.com/800x400" alt="Amit" style="width:100%;border-radius:10px;">
+    </section>
+  `,
+  about: `
+    <section>
+      <h2>About Me</h2>
+      <p>I specialize in Flutter development and am expanding my expertise in DevOps. I also have a creative side with Blender 3D and Rive animations, merging art and technology.</p>
+    </section>
+  `,
+  projects: `
+    <section>
+      <h2>Projects</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <img src="https://via.placeholder.com/300x150" alt="Project 1">
+          <p>Flutter E-commerce App</p>
+        </div>
+        <div class="project-card">
+          <img src="https://via.placeholder.com/300x150" alt="Project 2">
+          <p>DevOps Deployment Pipeline</p>
+        </div>
+        <div class="project-card">
+          <img src="https://via.placeholder.com/300x150" alt="Project 3">
+          <p>Blender 3D Portfolio</p>
+        </div>
+      </div>
+    </section>
+  `,
+  contact: `
+    <section>
+      <h2>Contact Me</h2>
+      <p>Email: <a href="mailto:amitsharan@example.com">amitsharan@example.com</a></p>
+      <p>LinkedIn: <a href="https://linkedin.com" target="_blank">linkedin.com/in/amitsharan</a></p>
+    </section>
+  `
+};
 
-gsap.registerPlugin(ScrollTrigger);
+// Navigation logic
+const content = document.getElementById('content');
+const links = document.querySelectorAll('.nav-link');
 
-// === GSAP hero entrance ===
-gsap.from("h1", {y: 30, opacity:0, duration:0.8, ease:"power3.out"});
-gsap.from("p", {y: 20, opacity:0, duration:0.6, delay:0.3});
-gsap.from(".cta", {scale:0.8, opacity:0, duration:0.5, delay:0.6});
-
-// === THREE.js placeholder animation ===
-const container = document.getElementById("three-container");
-const width = 400;
-const height = 300;
-
-const renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
-renderer.setSize(width, height);
-container.appendChild(renderer.domElement);
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(35, width/height, 0.1, 1000);
-camera.position.z = 5;
-
-const light = new THREE.PointLight(0xffffff, 1);
-light.position.set(5,5,5);
-scene.add(light);
-
-const geometry = new THREE.IcosahedronGeometry(2, 1);
-const material = new THREE.MeshStandardMaterial({color: 0x6C5CE7, wireframe: true});
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
-
-function animate(){
-  requestAnimationFrame(animate);
-  mesh.rotation.x += 0.005;
-  mesh.rotation.y += 0.005;
-  renderer.render(scene, camera);
+function loadPage(hash) {
+  const page = hash.replace('#', '') || 'home';
+  content.innerHTML = pages[page] || pages.home;
+  links.forEach(link => link.classList.remove('active'));
+  document.querySelector(`.nav-link[href="#${page}"]`).classList.add('active');
 }
-animate();
 
-// === Scroll animations ===
-gsap.utils.toArray(".project-card").forEach(card => {
-  gsap.from(card, {
-    opacity:0, y:50, duration:0.6,
-    scrollTrigger: {
-      trigger: card,
-      start: "top 80%"
-    }
-  });
-});
+window.addEventListener('hashchange', () => loadPage(location.hash));
+loadPage(location.hash);
 
-gsap.from("form", {
-  opacity:0, y:50, duration:0.6,
-  scrollTrigger: {
-    trigger: "form",
-    start: "top 85%"
-  }
-});
-
-// === Enhanced Cursor Particle Trail with Glow & Speed Sensitivity ===
-const cursorCanvas = document.getElementById("cursor-canvas");
-const cursorCtx = cursorCanvas.getContext("2d");
-
-function resizeCanvas() {
-  cursorCanvas.width = window.innerWidth;
-  cursorCanvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
+// Cursor Particle Animation
+const canvas = document.getElementById('cursor-canvas');
+const ctx = canvas.getContext('2d');
 let particles = [];
-let lastMouse = { x: null, y: null };
-let speed = 0;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
 class Particle {
-  constructor(x, y, size, speedX, speedY, color) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = size;
-    this.speedX = speedX;
-    this.speedY = speedY;
-    this.color = color;
-    this.life = 100;
+    this.size = Math.random() * 5 + 1;
+    this.speedX = (Math.random() - 0.5) * 2;
+    this.speedY = (Math.random() - 0.5) * 2;
+    this.color = `hsl(${Math.random() * 60 + 200}, 100%, 50%)`;
   }
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
-    this.size *= 0.96;
-    this.life--;
+    this.size *= 0.95;
   }
   draw() {
-    cursorCtx.shadowColor = this.color;
-    cursorCtx.shadowBlur = 10;
-    cursorCtx.beginPath();
-    cursorCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    cursorCtx.fillStyle = this.color;
-    cursorCtx.fill();
-    cursorCtx.shadowBlur = 0; // reset shadowBlur
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
   }
 }
 
-window.addEventListener("mousemove", (e) => {
-  if (lastMouse.x !== null && lastMouse.y !== null) {
-    const dx = e.x - lastMouse.x;
-    const dy = e.y - lastMouse.y;
-    speed = Math.min(Math.sqrt(dx * dx + dy * dy), 20); // cap speed
+function handleParticles() {
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+    particles[i].draw();
+    if (particles[i].size < 0.5) {
+      particles.splice(i, 1);
+      i--;
+    }
   }
+}
 
-  lastMouse.x = e.x;
-  lastMouse.y = e.y;
-
-  const baseSize = 2 + speed / 4;
-  const baseSpeed = speed / 5;
-
-  for (let i = 0; i < 3; i++) {
-    const size = baseSize * (Math.random() * 0.6 + 0.7);
-    const speedX = (Math.random() - 0.5) * baseSpeed;
-    const speedY = (Math.random() - 0.5) * baseSpeed;
-
-    // Purple hues around 260-280 degree hue range for brand color
-    const hue = 260 + Math.random() * 20;
-    const color = `hsl(${hue}, 80%, 70%)`;
-
-    particles.push(new Particle(e.x, e.y, size, speedX, speedY, color));
+window.addEventListener('mousemove', e => {
+  for (let i = 0; i < 5; i++) {
+    particles.push(new Particle(e.x, e.y));
   }
 });
 
-function animateParticles() {
-  cursorCtx.fillStyle = "rgba(15, 23, 36, 0.2)"; // fade trails matching bg
-  cursorCtx.fillRect(0, 0, cursorCanvas.width, cursorCanvas.height);
-
-  particles.forEach((p, i) => {
-    p.update();
-    p.draw();
-    if (p.size < 0.5 || p.life <= 0) {
-      particles.splice(i, 1);
-    }
-  });
-
-  requestAnimationFrame(animateParticles);
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  handleParticles();
+  requestAnimationFrame(animate);
 }
-animateParticles();
+animate();
